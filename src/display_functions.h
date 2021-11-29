@@ -10,5 +10,6 @@ void print_splash();
 void print_menuline(const char *text);
 void print_status(const char *text);
 void print_note(int note);
+void print_control(byte controller, byte value);
 
 #endif

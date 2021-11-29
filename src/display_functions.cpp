@@ -37,28 +37,35 @@ void print_status(const char *text)
 
 void print_note(int note)
 {
-  String outputStr = "" + String(note);
-  char output[sizeof(outputStr)];
-  outputStr.toCharArray(output, sizeof(output));
-
   u8g2.clearBuffer();
   print_menuline("MIDI Note On");
-  u8g2.setFont(u8g2_font_logisoso38_tf);
-  u8g2.setCursor(ALIGN_CENTER(output), 42);
-  u8g2.print(output);
 
-//   u8g2.setFont(u8g2_font_helvR08_tr);
-//   u8g2.drawButtonUTF8(62, 20, U8G2_BTN_INV|U8G2_BTN_BW2, 0,  2,  2, output);
+  // u8g2.setFont(u8g2_font_logisoso38_tf);
+  // u8g2.setCursor(ALIGN_CENTER(output), 42);
+  // u8g2.print(output);
+
+  u8g2.setFont(u8g2_font_fub20_tn);
+  u8g2.drawButtonUTF8(ALIGN_CENTER(String(note).c_str()), 30, U8G2_BTN_INV|U8G2_BTN_BW2, 0,  2,  2, String(note).c_str());
 
   // u8g2.setFont(u8g2_font_unifont_t_76);
   // u8g2.drawGlyph(5, 20, 0x266a);
 
-  // u8g2.setFont(u8g2_font_streamline_all_t);
-  // u8g2.drawGlyph(5, 20, 0x01b0);
+  // u8g2.setFont(u8g2_font_streamline_music_audio_t);
+  // u8g2.drawGlyph(5, 20, 0x0031);
+  u8g2.sendBuffer();
+}
 
-  // 'Free vectors icons and illustrations from Streamline'
-  // The link must be visible and readable as a hyperlink text and link to https://streamlinehq.com
-
+void print_control(byte controller, byte value)
+{
+  String outputStr = String(controller,DEC) + ":" + String(value,DEC);
+  u8g2.clearBuffer();
+  print_menuline("MIDI CC");
+  
+  u8g2.setFont(u8g2_font_fub20_tn);
+  // u8g2 erwartet nicht Strings, sondern C-Strings (terminierte char-Arrays)
+  // String bietet einen Getter für den intern genutzten C-String an: .c_str()
+  // So kann String auch dort genutzt werden, wo char[] gefordert sind.
+  u8g2.drawButtonUTF8(64, 30, U8G2_BTN_INV|U8G2_BTN_BW2|U8G2_BTN_HCENTER, 90,  2,  2, outputStr.c_str());
 
   u8g2.sendBuffer();
 }

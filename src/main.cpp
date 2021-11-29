@@ -6,8 +6,6 @@
 
 using namespace admux;
 
-const char *appname = "Rack-MIDI 2021";
-
 // pin config
 #define buttonMpSignal 8 // button multiplexer
 #define arcadeMpSignal 7 // arcade multiplexer
@@ -69,8 +67,7 @@ void loop() {
       } else
       {
         noteOff(midiChannel, butNotes[i], 64);
-        u8g2.clearBuffer();
-        u8g2.sendBuffer();
+        u8g2.clear();
       }
 
       MidiUSB.flush();
@@ -98,10 +95,11 @@ void loop() {
       Serial.print("\tControlValLast=");
       Serial.print(controlValLast[i]);
       Serial.println();
-
+      
       controlChange(0, potNotes[i], controlVal[i]);
+      print_control(potNotes[i], controlVal[i]);
       MidiUSB.flush();
-      controlValLast[i] = controlVal[i];      
+      controlValLast[i] = controlVal[i];
     }
 
     delay(5);    

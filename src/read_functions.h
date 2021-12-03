@@ -1,5 +1,5 @@
-#ifndef READMUX_FUNCTIONS_H
-#define READMUX_FUNCTIONS_H
+#ifndef READ_FUNCTIONS_H
+#define READ_FUNCTIONS_H
 
 #include <Arduino.h>
 #include "Mux.h"

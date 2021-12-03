@@ -1,4 +1,4 @@
-#include "readmux_functions.h"
+#include "read_functions.h"
 
 
 void readMux(Mux mux, const byte midiChannel, const byte midiNotes[], byte historyVal[]) {

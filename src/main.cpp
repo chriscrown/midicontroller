@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include "Mux.h"
 
-#include "readmux_functions.h"
+#include "read_functions.h"
 
 using namespace admux;
 

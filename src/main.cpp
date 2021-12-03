@@ -3,6 +3,7 @@
 
 #include "midi_functions.h"
 #include "display_functions.h"
+#include "readmux_functions.h"
 
 using namespace admux;
 
@@ -34,6 +35,7 @@ byte controlValLast[3] = { 0, 0, 0 };
 Mux butMux(Pin(buttonMpSignal, INPUT_PULLUP, PinType::Digital), Pinset(mpA, mpB, mpC));
 Mux arcMux(Pin(arcadeMpSignal, INPUT_PULLUP, PinType::Digital), Pinset(mpA, mpB, mpC));
 
+
 void setup() {
   Serial.begin(9600);
 
@@ -41,7 +43,7 @@ void setup() {
   for (byte i = 0; i < 3; i++)
   {
     pinMode(pots[i], INPUT);
-  }
+  }  
 
   u8g2.begin();
   u8g2.enableUTF8Print();
@@ -51,29 +53,12 @@ void setup() {
   //print_note(23);
 }
 
+
 void loop() {
 
   // read multiplexers
-  byte data;
-  for (byte i = 0; i < butMux.channelCount(); i++) {
-    data = butMux.read(i);
-    
-    if (data != butValLast[i]) // val changed
-    {
-      if (data == LOW)
-      {
-        noteOn(midiChannel, butNotes[i], 64);   // 64 = normal velocity
-        print_note(butNotes[i]);
-      } else
-      {
-        noteOff(midiChannel, butNotes[i], 64);
-        u8g2.clear();
-      }
-
-      MidiUSB.flush();
-      butValLast[i] = data;    
-    }    
-  }
+  readMux(butMux, midiChannel, butNotes, butValLast);
+  readMux(arcMux, midiChannel, arcNotes, arcValLast);
 
   // read pots
   for (byte i = 0; i < 3; i++)
@@ -102,8 +87,14 @@ void loop() {
       controlValLast[i] = controlVal[i];
     }
 
-    delay(5);    
-  } 
+    delay(5); 
+  }
+
+  // todo:
+  // - Display-Timeouts, zurück zum Splash!?
+  // - MIDI Note off anzeigen
+  // - Versions-Anzeige
+  // - Setup-Mode, ggf. unterschiedliche Maps, Map-Auswahl im EEPROM speichern
   
 }
 
